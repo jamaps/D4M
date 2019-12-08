@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>D4M</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <!-- <link rel="shortcut icon" type="image/png" href="web/img/grocery_maki.png"/> -->
+
+
+
+    <!-- Load d3.js -->
+    <script src="https://d3js.org/d3.v4.js"></script>
+
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css' rel='stylesheet' />
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css' type='text/css' />
+
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+
+
+
+
+
+    <!-- <link href="https://fonts.googleapis.com/css?family=Titillium+Web:400,700" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+
+
+
+
+
+<link href="https://fonts.googleapis.com/css?family=Montserrat|Source+Sans+Pro&display=swap" rel="stylesheet">
+
+
+    <link href='web/map.css' rel='stylesheet' />
+
+</head>
+<body>
+
+
+
+<div id='bar'>
+
+  <div id='title'>
+    <h1><b>Poverty Patterns Toronto</b></h1>
+  </div>
+
+  <div id='title_bar'>
+  </div>
+
+
+  <div id='maptype'>
+    <div id='maptype_title'><p><b>Map Type</b></p></div>
+    <div onclick='map_switch("M_dot")' onmouseover='textcolouron("M_dot")' onmouseout='textcolouroff_m("M_dot")' id='M_dot'><p>Dot density</p></div>
+
+    <div onclick='map_switch("M_choro_d")' onmouseover='textcolouron("M_choro_d")' onmouseout='textcolouroff_m("M_choro_d")' id='M_choro_d'><p>Choropleth (density)</p></div>
+
+    <div onclick='map_switch("M_choro_p")' onmouseover='textcolouron("M_choro_p")' onmouseout='textcolouroff_m("M_choro_p")' id='M_choro_p'><p>Choropleth (proportion)</p></div>
+
+  </div>
+
+
+
+  <div id='sliderbar'>
+
+    <p><b>Year: <label id='active-date' style="color: #fa4700">2006</label></b></p>
+
+    <input autocomplete="off" id='slider' type='range' min='1991' max='2016' value='2006' step='1' />
+
+    <div id="scaleleg_l"><p>1991</p></div>
+    <div id="scaleleg_l"><p style="text-align:right">2016</p></div>
+
+  </div>
+
+
+
+  <div id='query_metric'>
+
+    <div id='metric_button_title'><p><b>Select measure</b></p></div>
+
+    <!-- <div onclick='measure_switch("Z1")' onmouseover='textcolouron("Z1")' onmouseout='textcolouroff("Z1")' id='C_pop'><p>Overalal population</p></div> -->
+
+    <div onclick='measure_switch("all_pop")' onmouseover='textcolouron("all_pop")' onmouseout='textcolouroff("all_pop")' id='all_pop'><p>Overall population</p></div>
+
+    <div onclick='measure_switch("lico_cats")' onmouseover='textcolouron("lico_cats")' onmouseout='textcolouroff("lico_cats")' id='lico_cats'><p>People in low-income households</p></div>
+
+    <div onclick='measure_switch("car_cats")' onmouseover='textcolouron("car_cats")' onmouseout='textcolouroff("car_cats")' id='car_cats'><p>People in households without a car</p></div>
+
+    <div onclick='measure_switch("house30_cats")' onmouseover='textcolouron("house30_cats")' onmouseout='textcolouroff("house30_cats")' id='house30_cats'><p>People in households spending 30% or more of their income on housing</p></div>
+
+
+
+</div>
+
+
+
+<div id="legend_all">
+
+<div id="legend_dots">
+<div id='legend_dots_text'><p>One <b><label id="dot_colour" style="color: #fa4700">dot</label></b> pertains to approximately <b><label id='ppl_per_dot'>200</label></b> people <label id="dot_var">in a low-income household</label></p> </div>
+</div>
+
+
+<div id="legend_choro">
+
+  <div id='legend_choro_side'><p>Percent of population in households spending 30% or more of their income on housing</p>
+  </div>
+
+    <div id="legend_choro_main">
+        <div id='legend_box'style="background-color: #b30000;"></div>
+        <div id='legend_value_5'><p>40% and up</p></div>
+        <div id='legend_box'style="background-color: #e34a33;"></div>
+        <div id='legend_value_4'><p>2,000 - 4,000</p></div>
+        <div id='legend_box'style="background-color: #FC8D5A;"></div>
+        <div id='legend_value_3'><p>20% - 30%</p></div>
+        <div id='legend_box'style="background-color: #FDCC8B;"></div>
+        <div id='legend_value_2'><p>10% - 20%</p></div>
+        <div id='legend_box'style="background-color: #fef0d9;"></div>
+        <div id='legend_value_1'><p>0% - 10%</p></div>
+    </div>
+
+
+
+
+
+  </div>
+
+
+</div>
+
+
+<div id="selection">
+
+  <div id="selection_top_text">
+    <p>Selection Summary:</p>
+  </div>
+
+
+  <div id="selection_prop">
+
+    <div id="my_dataviz"></div>
+
+  </div>
+
+  <div id="selection_bottom_text">
+    <p><b>&mdash;</b> Overall population</p>
+    <p><b> <label style="color: #fa4700">&mdash; </label></b><label id="plot_legend">People in low-income households</p>
+  </div>
+
+
+</div>
+
+
+    <!-- <div id='metric_button_title'><p>
+
+</p> -->
+
+
+        <!-- <div id='more_info'><p><b><a href="https://github.com/SAUSy-Lab/canada-transit-access"target="_blank">?</a></b></p></div> -->
+
+
+<!--
+  <div id='sliderscale'></div>
+
+
+  <div id='sliderscale_tick'></div>
+  <div id='sliderscale_tick'></div>
+  <div id='sliderscale_tick'></div>
+  <div id='sliderscale_tick'></div>
+  <div id='sliderscale_tick'></div> -->
+
+
+
+
+
+<div id='notes'>
+  <p>Map created by <a href="https://jamaps.github.io"target="_blank"><b>Jeff Allen</b></a></p>
+  <p>Details about the data, and how this map was put together, are on <a href="https://jamaps.github.io"target="_blank"><b>Github</b></a></p>
+
+</div>
+
+
+
+</div>
+
+<div id='map'></div>
+
+
+
+
+
+
+
+
+<script src='web/map.js'>
+</script>
+
+</body>
+</html>

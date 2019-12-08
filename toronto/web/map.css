@@ -1,0 +1,379 @@
+
+body { margin:0; padding:0; }
+
+
+#bar {
+  position:absolute;
+  width: 300px;
+  height: calc(100vh);
+}
+
+
+
+
+
+
+
+
+#title {
+  height: 39px;
+  padding: 0px;
+  margin: 0px;
+  border-bottom: solid 1px gray;
+}
+
+#title_bar {
+  height: 4px;
+  padding: 0px;
+  margin: 0px;
+  border-bottom: solid 1px gray;
+}
+
+#title h1 {
+  padding: 8px;
+  margin: 0px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+}
+
+
+
+
+
+
+
+
+
+#maptype{
+  height: 106px;
+  padding: 0px;
+  margin: 0px;
+  border-bottom: solid 1px grey;
+}
+#maptype p {
+  margin: 0px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 14px;
+}
+
+#M_dot, #M_choro_d, #M_choro_p {
+  width: 210px;
+  /* height: 20px; */
+  float: left;
+  padding-top: 5px;
+  padding-left: 10px;
+  cursor: pointer;
+  opacity: 1;
+  color: black;
+  /* border: solid 1px; */
+}
+#M_dot {
+  color: #fa4700;
+  font-weight: bold;
+
+}
+
+
+
+
+
+
+
+
+
+#sliderbar {
+  height: 70px;
+  padding: 0px;
+  margin: 0px;
+  border-bottom: solid 1px grey;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#sliderbar p {
+  margin: 0px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 14px;
+  padding-top: 5px;
+  padding-bottom: 1px;
+  /* padding-left: 10px; */
+}
+
+/* The slider itself */
+#slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 8px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+  cursor: pointer; /* Cursor on hover */
+}
+
+/* Mouse-over effects */
+#slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+#slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 5px; /* Set a specific slider handle width */
+  height: 15px; /* Slider handle height */
+  background: #fa4700; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+#slider::-moz-range-thumb {
+  width: 5px; /* Set a specific slider handle width */
+  height: 15px; /* Slider handle height */
+  background: #fa4700; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+
+#scaleleg_l {
+  margin-top: -8px;
+  width: 140px;
+  color: grey;
+  font-family: 'Source Sans Pro', sans-serif;
+  float: left;
+}
+
+#scaleleg_r {
+  margin-top: -8px;
+  width: 140px;
+  color: grey;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+#scaleleg_r p {
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#query_metric{
+  height: 145px;
+  padding: 0px;
+  margin: 0px;
+  border-bottom: solid 1px grey;
+}
+
+#query_metric p {
+  margin: 0px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 14px;
+}
+
+#query_metric a {
+  margin: 0px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 14px;
+  color: blue;
+  text-decoration: none;
+}
+
+#metric_button_title, #maptype_title {
+  width: 300px;
+  height: 20px;
+  float: left;
+  padding-top: 5px;
+  padding-left: 10px;
+  opacity: 1;
+}
+
+
+
+#lico_cats, #immig_cats, #house30_cats, #car_cats, #all_pop {
+  width: 250px;
+  /* height: 20px; */
+  float: left;
+  padding-top: 5px;
+  padding-left: 10px;
+  cursor: pointer;
+  opacity: 1;
+  color: black;
+  /* border: solid 1px; */
+}
+#lico_cats {
+  color: #fa4700;
+  font-weight: bold;
+
+}
+
+
+
+/* #Z1 {
+  color: red;
+} */
+
+
+#legend_all {
+  height: 111px;
+}
+
+#legend_dots {
+  height: 110px;
+  padding: 0px;
+  margin: 0px;
+  opacity: 1;
+}
+
+#legend_dots p {
+  margin: 0px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 14px;
+}
+
+#legend_dots_text {
+  width: 280px;
+  height: 20px;
+  float: left;
+  padding-top: 10px;
+  padding-left: 10px;
+  opacity: 1;
+}
+
+
+
+
+#legend_choro {
+  height: 110px;
+  padding: 0px;
+  margin: 0px;
+  opacity: 1;
+  display: none;
+}
+
+#legend_choro p {
+  margin: 0px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 14px;
+}
+
+#legend_choro_main {
+  width: 145px;
+  float: right;
+  padding-top: 10px;
+}
+
+#legend_box {
+  width: 25px;
+  height: 15px;
+  /* border-bottom: solid 1px; */
+  margin-left: 10px;
+  margin-right: 10px;
+  float: left;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  border: solid 1px lightgray;
+}
+
+#legend_choro_side {
+  padding-left: 10px;
+  width: 145px;
+  float: left;
+  padding-top: 10px;
+  /* border-left: solid 1px; */
+}
+
+
+
+
+
+
+
+
+
+
+
+#selection {
+  height: 300px;
+  border-top: solid 1px grey;
+  border-bottom: solid 1px grey;
+}
+
+#selection p {
+  margin: 0px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 14px;
+}
+
+#selection_top_text {
+  padding-top: 8px;
+  padding-left: 10px;
+  opacity: 1;
+}
+
+#selection_bottom_text {
+  padding-top: 8px;
+  padding-left: 40px;
+  opacity: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#notes{
+  height: 70px;
+  padding: 0px;
+  margin: 0px;
+  border-bottom: solid 1px grey;
+}
+
+#notes p {
+  padding-top: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size: 11px;
+  margin: 0px;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+#notes a {
+  text-decoration: none;
+  color:  #1a81ff;
+}
+
+
+
+
+
+
+
+
+
+#map {
+
+  top:0;
+  bottom:0;
+  width:calc(100% - 300px);
+  /* overflow:hidden; */
+  height:calc(100vh);
+  border-left: solid 1px;
+  float: right;
+  overflow: auto;
+}
