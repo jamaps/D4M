@@ -388,7 +388,8 @@ var current_measure = 'lico_cats'
 var current_map = 'M_dot'
 var current_year = 2006
 
-var selected_zone = ""
+var selected_zone = "Toronto"
+var selection_type = "CSD"
 
 var all_measure_ids = ['lico_cats','house30_cats','car_cats','all_pop']
 var all_measure_ids_yes = ['LICO_yes','house30_yes','car_no','NULL']
