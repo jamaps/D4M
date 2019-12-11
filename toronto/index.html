@@ -132,11 +132,29 @@
 </div>
 
 
-<div id="selection">
+<div id="selection_title">
 
-  <div id="selection_top_text">
-    <p>Selection Summary:</p>
-  </div>
+<div id="selection_top_text">
+  <p><b>Selection Type:</b></p>
+</div>
+
+<div  onclick='selection_switch("selection_CSD")'
+onmouseover='textcolouron("selection_CSD")' onmouseout='textcolouroff_s("selection_CSD")' id="selection_CSD"><p>By Municipality</p></div>
+<div  onclick='selection_switch("selection_CT")' onmouseover='textcolouron("selection_CT")' onmouseout='textcolouroff_s("selection_CT")' id="selection_CT"
+><p>By Neighbourhood (CT)</p></div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<div id="selection">
 
 
   <div id="selection_prop">
@@ -150,6 +168,10 @@
     <p><b> <label style="color: #fa4700">&mdash; </label></b><label id="plot_legend">People in low-income households</p>
   </div>
 
+
+  <div id="selected_zone">
+    <p>Selected Zone: <label id='selected_id'>Toronto</label></p>
+  </div>
 
 </div>
 
@@ -178,7 +200,7 @@
 
 <div id='notes'>
   <p>Map created by <a href="https://jamaps.github.io"target="_blank"><b>Jeff Allen</b></a></p>
-  <p>Details about the data, and how this map was put together, are on <a href="https://jamaps.github.io"target="_blank"><b>Github</b></a></p>
+  <p>Details about the data, and how this map was put together, are on <a href="https://github.com/jamaps/D4M"target="_blank"><b>Github</b></a></p>
 
 </div>
 

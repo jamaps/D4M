@@ -389,7 +389,7 @@ var current_map = 'M_dot'
 var current_year = 2006
 
 var selected_zone = "Toronto"
-var selection_type = "CSD"
+selection_type = "selection_CSD"
 
 var all_measure_ids = ['lico_cats','house30_cats','car_cats','all_pop']
 var all_measure_ids_yes = ['LICO_yes','house30_yes','car_no','NULL']
@@ -689,6 +689,39 @@ function measure_switch(metric_name) {
 
 
 
+// change selection type (CT CSD)
+
+
+function selection_switch(selection) {
+  console.log(selection)
+  selection_type = selection
+
+  document.getElementById(selection_type).style.color = '#fa4700';
+  document.getElementById(selection_type).style.fontWeight = 'bold';
+
+  if (selection_type == "selection_CSD") {
+    document.getElementById("selection_CT").style.color = 'black';
+    document.getElementById("selection_CT").style.fontWeight = 'normal';
+  }
+  else {
+    document.getElementById("selection_CSD").style.color = 'black';
+    document.getElementById("selection_CSD").style.fontWeight = 'normal';
+  }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 // hover orange over the selected metric
 function textcolouron(id_name) {
   document.getElementById(id_name).style.color = '#fa4700';
@@ -718,6 +751,21 @@ function textcolouroff_m(id_name) {
   }
 }
 
+function textcolouroff_s(id_name) {
+  if (selection_type != id_name) {
+    document.getElementById(id_name).style.color = 'black';
+  }
+  // else {
+  //   document.getElementById(selection_type).style.color = 'black';
+  // }
+}
+
+
+
+
+
+
+
 
 
 //
@@ -733,65 +781,72 @@ var d3_data = []
 
 map.on('click', function(e) {
 
+    if (selection_type == "selection_CT") {
 
-    var features = map.queryRenderedFeatures(e.point, { layers: ['CT-fill-P'] });
+      var features = map.queryRenderedFeatures(e.point, { layers: ['CT-fill-P'] });
 
-    var feature = features[0];
+      var feature = features[0];
 
-    console.log(feature.properties.ctuid)
+      console.log(feature.properties.ctuid)
 
-    if (feature.properties.ctuid != prev_selected_ctuid) {
+      if (feature.properties.ctuid != prev_selected_ctuid) {
 
-      style_info = [
-        "match",
-        ["get", "ctuid"],
-        [feature.properties.ctuid],
-        1,
-        0
-      ]
+        style_info = [
+          "match",
+          ["get", "ctuid"],
+          [feature.properties.ctuid],
+          1,
+          0
+        ]
 
-      map.setPaintProperty('CT-border-selected', 'line-opacity', style_info)
+        map.setPaintProperty('CT-border-selected', 'line-opacity', style_info)
 
-      prev_selected_ctuid = feature.properties.ctuid
+        prev_selected_ctuid = feature.properties.ctuid
+
+      }
+
+      else {
+
+
+        map.setPaintProperty('CT-border-selected', 'line-opacity', 0);
+
+        prev_selected_ctuid = "";
+
+      }
+
+
+
+      document.getElementById('selection_bottom_text').style.opacity = 1;
+
+      selected_zone = feature
+
+
+      d3_data = []
+      for (year in all_years) {
+        year_in = (all_years[year]);
+        year_string = year_in.toString();
+        pop_name = "pop_" + year_string;
+        inc_name = "pop_inc_" + year_string;
+        hou30_name = "pop_hou30_" + year_string;
+        car_name = "pop_nocar_" + year_string
+        d3_data.push({
+          year: year_in,
+          pop: selected_zone.properties[pop_name],
+          inc: selected_zone.properties[inc_name],
+          hou30: selected_zone.properties[hou30_name],
+          car: selected_zone.properties[car_name]
+        })
+      }
+
+
+      plot_chart_pop(current_measure,current_year,d3_data);
 
     }
 
-    else {
-
+    else (
 
       map.setPaintProperty('CT-border-selected', 'line-opacity', 0);
 
-      prev_selected_ctuid = "";
-
-    }
-
-
-
-    document.getElementById('selection_bottom_text').style.opacity = 1;
-
-    selected_zone = feature
-
-
-
-    d3_data = []
-    for (year in all_years) {
-      year_in = (all_years[year]);
-      year_string = year_in.toString();
-      pop_name = "pop_" + year_string;
-      inc_name = "pop_inc_" + year_string;
-      hou30_name = "pop_hou30_" + year_string;
-      car_name = "pop_nocar_" + year_string
-      d3_data.push({
-        year: year_in,
-        pop: selected_zone.properties[pop_name],
-        inc: selected_zone.properties[inc_name],
-        hou30: selected_zone.properties[hou30_name],
-        car: selected_zone.properties[car_name]
-      })
-    }
-
-
-    plot_chart_pop(current_measure,current_year,d3_data);
-
+    )
 
 });
