@@ -381,6 +381,119 @@ var svg = d3.select("#my_dataviz")
 
 
 
+function plot_chart_pop_csd(current_measure_in,current_year_in,csd_name_in) {
+
+document.getElementById('my_dataviz').innerHTML = ""
+
+
+// set the dimensions and margins of the graph
+var margin = {top: 20, right: 20, bottom: 20, left: 50},
+    width = 300 - margin.left - margin.right,
+    height = 200 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+
+//Read the data
+  var data = data_in
+
+  // Add X axis --> it is a date format
+  var x = d3.scaleLinear()
+    .domain([1991,2016])
+    .range([ 0, width ]);
+  svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x).tickValues([1991,1996,2001,2006,2011,2016]).ticks(6,"")).selectAll("text")
+        .style("text-anchor", "center")
+        .attr("transform", "rotate(0)" );
+
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([0, d3.max([2000,d3.max(data, function(d) { return d.pop; })])])
+    .range([ height, 0 ]);
+  svg.append("g")
+    .call(d3.axisLeft(y).ticks(5));
+
+
+  svg.append("line")
+   .attr("y1", 0)
+   .attr("y2", 4000)
+   .attr("x1", 2000)
+   .attr("x2", 2000)
+   .attr( "stroke", "black" ).attr( "stroke-width", "1" );
+
+
+  // Add the line
+  svg.append("path")
+    .datum(data)
+    .attr("fill", "none")
+    .attr("stroke", "black")
+    .attr("stroke-width", 1.5)
+    .attr("d", d3.line()
+      .x(function(d) { return x(d.year  ) })
+      .y(function(d) { return y(d.pop) })
+      )
+
+
+  if (current_measure_in == "lico_cats") {
+    svg.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "#fa4700")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.year  ) })
+        .y(function(d) { return y(d.inc) })
+        )
+
+    document.getElementById('plot_legend').innerText = "People in low-income households"
+
+  }
+
+  else if (current_measure_in == "car_cats") {
+    svg.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "#fa4700")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.year  ) })
+        .y(function(d) { return y(d.car) })
+        )
+
+    document.getElementById('plot_legend').innerText = "People in households without a car"
+
+  }
+
+  else if (current_measure_in == "house30_cats") {
+    svg.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "#fa4700")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.year  ) })
+        .y(function(d) { return y(d.hou30) })
+        )
+
+    document.getElementById('plot_legend').innerText = "People in households spending 30% or more of their income on housing"
+
+  } else {
+    document.getElementById('plot_legend').innerText = ""
+  }
+
+}
+
+
+
 
 
 // initial map view
@@ -388,7 +501,7 @@ var current_measure = 'lico_cats'
 var current_map = 'M_dot'
 var current_year = 2006
 
-var selected_zone = "Toronto"
+var selected_zone_name = "Toronto"
 selection_type = "selection_CSD"
 
 var all_measure_ids = ['lico_cats','house30_cats','car_cats','all_pop']
@@ -702,10 +815,14 @@ function selection_switch(selection) {
   if (selection_type == "selection_CSD") {
     document.getElementById("selection_CT").style.color = 'black';
     document.getElementById("selection_CT").style.fontWeight = 'normal';
+
+    map.setPaintProperty('CT-border-selected', 'line-opacity', 0);
   }
   else {
     document.getElementById("selection_CSD").style.color = 'black';
     document.getElementById("selection_CSD").style.fontWeight = 'normal';
+
+    map.setPaintProperty('d4m-csd-border-selected', 'line-opacity', 0);
   }
 
 
@@ -767,7 +884,6 @@ function textcolouroff_s(id_name) {
 
 
 
-
 //
 //
 //
@@ -777,17 +893,27 @@ function textcolouroff_s(id_name) {
 //
 // // select dauid boundary when clicked in red
 var prev_selected_ctuid = ""
+var prev_selected_csduid = ""
 var d3_data = []
 
 map.on('click', function(e) {
 
     if (selection_type == "selection_CT") {
 
+
+      map.setPaintProperty('d4m-csd-border-selected', 'line-opacity', 0);
+
+
+
       var features = map.queryRenderedFeatures(e.point, { layers: ['CT-fill-P'] });
 
       var feature = features[0];
 
       console.log(feature.properties.ctuid)
+
+      selected_zone_name = feature.properties.ctuid
+
+
 
       if (feature.properties.ctuid != prev_selected_ctuid) {
 
@@ -843,10 +969,14 @@ map.on('click', function(e) {
 
     }
 
-    else (
+    else {
 
       map.setPaintProperty('CT-border-selected', 'line-opacity', 0);
 
-    )
+
+
+    }
+
+  document.getElementById('selected_id').innerHTML = selected_zone_name
 
 });
