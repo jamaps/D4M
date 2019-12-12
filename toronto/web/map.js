@@ -1,5 +1,6 @@
+// initial functions
 
-
+// changing the style of the proportional choropleth
 function choro_prop_style_switch(current_measure_in,current_year_in) {
   // styling the choropleths
   if (current_measure_in == "all_pop") {
@@ -104,6 +105,7 @@ function choro_prop_style_switch(current_measure_in,current_year_in) {
     }
 }
 
+// changing the style of the density choropleth
 function choro_density_style_switch(current_measure_in,current_year_in) {
   // styling the choropleths
   if (current_measure_in == "all_pop") {
@@ -236,6 +238,7 @@ function choro_density_style_switch(current_measure_in,current_year_in) {
     }
 }
 
+// placing the choropleth legend
 function choro_legend_placer(current_measure_in,current_map_in) {
   var choro_leg = ""
   if (current_map_in == "M_dot") {
@@ -268,6 +271,7 @@ function choro_legend_placer(current_measure_in,current_map_in) {
   return choro_leg;
 }
 
+// D3 plot if CT is selected
 function plot_chart_pop(current_measure_in,current_year_in, data_in) {
 
 document.getElementById('my_dataviz').innerHTML = ""
@@ -379,6 +383,7 @@ var svg = d3.select("#my_dataviz")
 
 }
 
+// D3 plot if CSD (municipality) is selected
 function plot_chart_pop_csd(current_measure_in,current_year_in,csd_name_in) {
 
 document.getElementById('my_dataviz').innerHTML = ""
@@ -494,28 +499,30 @@ var svg = d3.select("#my_dataviz")
 
 
 
-
-// initial map view
+// initial map variables for what is displayed
 var current_measure = 'lico_cats'
 var current_map = 'M_dot'
 var current_year = 2006
-
 var selected_zone_name = "Toronto"
 selection_type = "selection_CSD"
 
+// variables needed for future functions
 var all_measure_ids = ['lico_cats','house30_cats','car_cats','all_pop']
 var all_measure_ids_yes = ['LICO_yes','house30_yes','car_no','NULL']
 var all_measure_dot_texts = ['in a low-income household','in a household which spends 30% or more of their income on housing','in a household without a car','']
-
-var choro_colours_red = ['#fef0d9','#fdcc8a','#fc8d59','#e34a33','#b30000']
-
 var all_maptypes = ['M_dot','M_choro_d','M_choro_p']
 
+
+// colours for the choropleth map
+var choro_colours_red = ['#fef0d9','#fdcc8a','#fc8d59','#e34a33','#b30000']
+
+// all the years
 var all_years = [1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016]
 
 
-// initial plot
 
+
+// initial plot to show (Toronto)
 plot_chart_pop_csd("lico_cats",2006,"Toronto")
 
 
@@ -544,6 +551,8 @@ map.scrollZoom.setWheelZoomRate(0.5);
 
 
 
+
+
 // Add controls ( zoom and rotation ) to the map.
 map.addControl(new mapboxgl.NavigationControl());
 bar = new mapboxgl.ScaleControl({
@@ -551,31 +560,6 @@ bar = new mapboxgl.ScaleControl({
     unit: 'metric'
   });
 map.addControl(bar);
-
-
-// // add draw controls
-// var draw = new MapboxDraw({
-// displayControlsDefault: false,
-// controls: {
-// polygon: true,
-// trash: true
-// }
-// });
-// map.addControl(draw);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -676,19 +660,12 @@ function map_switch(map_type_name) {
 
     document.getElementById('legend_choro').style.display = 'none';
 
-    // document.getElementById('legend_choro').style.opacity = 0;
-    // document.getElementById('legend_choro').innerHTML = "";
-    // document.getElementById('legend_choro').style.height = 0;
 
   }
   else if (current_map == "M_choro_d") {
     map.setPaintProperty('dots-50-v1', 'circle-opacity', 0);
     map.setPaintProperty('CT-fill-D', 'fill-opacity', 0.73);
     map.setPaintProperty('CT-fill-P', 'fill-opacity', 0);
-
-    // document.getElementById('legend_dots').style.opacity = 0;
-    // document.getElementById('legend_dots').innerHTML = ""
-    // document.getElementById('legend_dots').style.height = 0;
 
     document.getElementById('legend_dots').style.display = 'none';
 
@@ -703,10 +680,6 @@ function map_switch(map_type_name) {
     map.setPaintProperty('CT-fill-D', 'fill-opacity', 0);
     map.setPaintProperty('CT-fill-P', 'fill-opacity', 0.73);
 
-    // document.getElementById('legend_dots').style.opacity = 0;
-    // document.getElementById('legend_dots').innerHTML = ""
-    // document.getElementById('legend_dots').style.height = 0;
-
     document.getElementById('legend_dots').style.display = 'none';
 
     document.getElementById('legend_choro').style.display = 'inline';
@@ -718,13 +691,7 @@ function map_switch(map_type_name) {
 
   measure_switch(current_measure);
 
-  // choro_legend_placer(current_measure,current_map);
-
-
-
 }
-
-
 
 
 
@@ -798,24 +765,12 @@ function measure_switch(metric_name) {
     plot_chart_pop_csd(current_measure,current_year,selected_zone_name)
   }
 
-  // choro_legend_placer(current_measure,current_map);
-
-  // change variable on the map
-  // lists all the layers map.getStyle().layers
 }
-
-
-// // gets all data in the view window -might be useful for viz
-// map.querySourceFeatures('composite', {
-//   'sourceLayer': 'd4m-csd-9hyox0'
-// });
 
 
 
 
 // change selection type (CT CSD)
-
-
 function selection_switch(selection) {
   console.log(selection)
   selection_type = selection
@@ -843,13 +798,6 @@ function selection_switch(selection) {
 
 
 
-
-
-
-
-
-
-
 // hover orange over the selected metric
 function textcolouron(id_name) {
   document.getElementById(id_name).style.color = '#fa4700';
@@ -859,12 +807,12 @@ function textcolouroff(id_name) {
   if (all_measure_ids[mes_index] == current_measure) {
     document.getElementById(id_name).style.color = '#fa4700';
     document.getElementById(id_name).style.opacity = '1.0';
-    // document.getElementById(all_measure_ids[qq]).style.fontWeight = 'bold';
+
   }
   else {
     document.getElementById(id_name).style.color = 'black';
     document.getElementById(id_name).style.opacity = '1.0';
-    // document.getElementById(all_measure_ids[qq]).style.fontWeight = 'normal';
+
   }
 }
 function textcolouroff_m(id_name) {
@@ -883,9 +831,7 @@ function textcolouroff_s(id_name) {
   if (selection_type != id_name) {
     document.getElementById(id_name).style.color = 'black';
   }
-  // else {
-  //   document.getElementById(selection_type).style.color = 'black';
-  // }
+
 }
 
 
@@ -895,14 +841,8 @@ function textcolouroff_s(id_name) {
 
 
 
-//
-//
-//
-//
-// var temp
-//
-//
-// // select dauid boundary when clicked in red
+
+// selecting boundaries on the map - to display as black as selected, and to change the plot
 var prev_selected_ctuid = ""
 var prev_selected_csduid = ""
 var d3_data = []
