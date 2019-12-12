@@ -379,15 +379,13 @@ var svg = d3.select("#my_dataviz")
 
 }
 
-
-
 function plot_chart_pop_csd(current_measure_in,current_year_in,csd_name_in) {
 
 document.getElementById('my_dataviz').innerHTML = ""
 
 
 // set the dimensions and margins of the graph
-var margin = {top: 20, right: 20, bottom: 20, left: 50},
+var margin = {top: 20, right: 20, bottom: 20, left: 70},
     width = 300 - margin.left - margin.right,
     height = 200 - margin.top - margin.bottom;
 
@@ -402,7 +400,14 @@ var svg = d3.select("#my_dataviz")
 
 
 //Read the data
-  var data = data_in
+
+
+  d3.csv("https://raw.githubusercontent.com/jamaps/D4M/gh-pages/toronto/web/csd_tor_with_data.csv", function(data){
+    //code dealing with data here
+
+
+    // filter data by the CSD NAME that we have selected
+  data = data.filter(function(d) { return d.CSDNAME == csd_name_in })
 
   // Add X axis --> it is a date format
   var x = d3.scaleLinear()
@@ -417,18 +422,10 @@ var svg = d3.select("#my_dataviz")
 
   // Add Y axis
   var y = d3.scaleLinear()
-    .domain([0, d3.max([2000,d3.max(data, function(d) { return d.pop; })])])
+    .domain([0, d3.max([200000,d3.max(data, function(d) { return d.pop; })])])
     .range([ height, 0 ]);
   svg.append("g")
     .call(d3.axisLeft(y).ticks(5));
-
-
-  svg.append("line")
-   .attr("y1", 0)
-   .attr("y2", 4000)
-   .attr("x1", 2000)
-   .attr("x2", 2000)
-   .attr( "stroke", "black" ).attr( "stroke-width", "1" );
 
 
   // Add the line
@@ -440,7 +437,7 @@ var svg = d3.select("#my_dataviz")
     .attr("d", d3.line()
       .x(function(d) { return x(d.year  ) })
       .y(function(d) { return y(d.pop) })
-      )
+    )
 
 
   if (current_measure_in == "lico_cats") {
@@ -490,6 +487,8 @@ var svg = d3.select("#my_dataviz")
     document.getElementById('plot_legend').innerText = ""
   }
 
+  });
+
 }
 
 
@@ -513,6 +512,13 @@ var choro_colours_red = ['#fef0d9','#fdcc8a','#fc8d59','#e34a33','#b30000']
 var all_maptypes = ['M_dot','M_choro_d','M_choro_p']
 
 var all_years = [1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016]
+
+
+// initial plot
+
+plot_chart_pop_csd("lico_cats",2006,"Toronto")
+
+
 
 
 
@@ -785,7 +791,12 @@ function measure_switch(metric_name) {
 
   document.getElementById('legend_choro').innerHTML = choro_legend_placer(current_measure,current_map);
 
-  plot_chart_pop(current_measure,current_year,d3_data);
+
+  if (selection_type == "selection_CT") {
+    plot_chart_pop(current_measure,current_year,d3_data);
+  } else {
+    plot_chart_pop_csd(current_measure,current_year,selected_zone_name)
+  }
 
   // choro_legend_placer(current_measure,current_map);
 
@@ -893,7 +904,7 @@ function textcolouroff_s(id_name) {
 //
 // // select dauid boundary when clicked in red
 var prev_selected_ctuid = ""
-var prev_selected_csduid = ""
+var prev_selected_csduid = "Toronto"
 var d3_data = []
 
 map.on('click', function(e) {
@@ -973,6 +984,40 @@ map.on('click', function(e) {
 
       map.setPaintProperty('CT-border-selected', 'line-opacity', 0);
 
+      var features = map.queryRenderedFeatures(e.point, { layers: ['d4m-csd-9hyox0'] });
+
+      var feature = features[0];
+
+      console.log(feature.properties.CSDNAME)
+
+      selected_zone_name = feature.properties.CSDNAME
+
+      if (feature.properties.CSDNAME != prev_selected_csduid) {
+
+        style_info = [
+          "match",
+          ["get", "CSDNAME"],
+          [feature.properties.CSDNAME],
+          1,
+          0
+        ]
+
+        map.setPaintProperty('d4m-csd-border-selected', 'line-opacity', style_info)
+
+        prev_selected_ctuid = feature.properties.CSDNAME
+
+        plot_chart_pop_csd(current_measure,current_year,feature.properties.CSDNAME)
+
+      }
+
+      else {
+
+
+        map.setPaintProperty('d4m-csd-border-selected', 'line-opacity', 0);
+
+        prev_selected_csduid = "";
+
+      }
 
 
     }
