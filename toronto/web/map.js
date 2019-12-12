@@ -904,7 +904,7 @@ function textcolouroff_s(id_name) {
 //
 // // select dauid boundary when clicked in red
 var prev_selected_ctuid = ""
-var prev_selected_csduid = "Toronto"
+var prev_selected_csduid = ""
 var d3_data = []
 
 map.on('click', function(e) {
@@ -1004,7 +1004,7 @@ map.on('click', function(e) {
 
         map.setPaintProperty('d4m-csd-border-selected', 'line-opacity', style_info)
 
-        prev_selected_ctuid = feature.properties.CSDNAME
+        prev_selected_csduid = feature.properties.CSDNAME
 
         plot_chart_pop_csd(current_measure,current_year,feature.properties.CSDNAME)
 
