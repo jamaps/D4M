@@ -588,6 +588,14 @@ document.getElementById('slider').addEventListener('input', function(e) {
   // update text in the UI
   document.getElementById('active-date').innerText = current_year;
 
+  var all_census_years = [1991,1996,2001,2006,2011,2016]
+
+  if (all_census_years.includes(current_year)) {
+    document.getElementById('active-year-type').innerText = "(census year)";
+  } else {
+    document.getElementById('active-year-type').innerText = "(estimated data)";
+  }
+
   choro_density_style_switch(current_measure,current_year);
   choro_prop_style_switch(current_measure,current_year);
 });

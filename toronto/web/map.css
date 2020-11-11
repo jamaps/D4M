@@ -118,6 +118,17 @@ body { margin:0; padding:0; }
   opacity: 1; /* Fully shown on mouse-over */
 }
 
+
+#census_year{
+  height: 5px;
+  width: 1px;
+  margin-top: 15px;
+  padding-right: 30px;
+  border-top: solid 1px grey;
+}
+
+
+
 /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
 #slider::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default look */
